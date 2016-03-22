@@ -13,15 +13,28 @@ def connect():
 
 def deleteMatches():
     """Remove all the match records from the database."""
-
+    database = connect()
+	cursor = database.cursor()
+	cursor.execute("DELTE FROM matches;")
+	database.commit()
+	database.close()
 
 def deletePlayers():
     """Remove all the player records from the database."""
-
+    database = connect()
+	cursor = database.cursor()
+	cursor.execute("DELTE FROM players;")
+	database.commit()
+	database.close()
 
 def countPlayers():
     """Returns the number of players currently registered."""
-
+	database = connect()
+	cursor = database.cursor()
+	cursor.execute("SELECT COUNT(*) FROM players;")
+	player_count = cursor.fetchall()[0][0]
+	database.close()
+	return player_count
 
 def registerPlayer(name):
     """Adds a player to the tournament database.
@@ -32,6 +45,11 @@ def registerPlayer(name):
     Args:
       name: the player's full name (need not be unique).
     """
+	database = connect()
+	cursor = database.cursor()
+	cursor.execute("INSERT INTO players (name, wins, matches) VALUES (%, 0, 0);", (name,))
+	database.commit()
+	database.close()
 
 
 def playerStandings():
@@ -47,6 +65,12 @@ def playerStandings():
         wins: the number of matches the player has won
         matches: the number of matches the player has played
     """
+	database = connect()
+	cursor = database.cursor()
+	cursor.execute("SELECT * FROM players ORDER BY wins DESC;")
+	standings = cursor.fetchall()
+	database.close()
+	return standings
 
 
 def reportMatch(winner, loser):
@@ -56,6 +80,13 @@ def reportMatch(winner, loser):
       winner:  the id number of the player who won
       loser:  the id number of the player who lost
     """
+	database = connect()
+	cursor = database.cursor()
+	cursor.execute("UPDATE players SET wins = wins + 1 WHERE id = %", (winner,))
+	cursor.execute("UPDATE players SET matches = matches + 1 WHERE id = %", (winner,))
+	cursor.execute("UPDATE players SET matches = matches + 1 WHERE id = %", (loser,))
+	database.commit()
+	database.close()
  
  
 def swissPairings():

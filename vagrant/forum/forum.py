@@ -1,3 +1,4 @@
+#! python2
 #
 # DB Forum - a buggy web forum server backed by a good database
 #
