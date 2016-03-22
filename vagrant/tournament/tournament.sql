@@ -9,9 +9,15 @@
 CREATE DATABASE tournament;
 \c tournament;
 
-CREATE TABLE players (id SERIAL PRIMARY KEY, name TEXT, wins INTEGER, matches INTEGER);
+DROP TABLE IF EXISTS players;
 
-CREATE TABLE matches (p1 integer references players(id), 
+CREATE TABLE players (id SERIAL PRIMARY KEY, name TEXT, 
+ wins INTEGER DEFAULT 0, matches INTEGER DEFAULT 0);
+
+DROP TABLE IF EXISTS matches;
+ 
+CREATE TABLE matches (p1 integer references players(id),
+  name1 text, 
   p2 integer references players(id), 
-  results integer references players(id));
+  name2 text);
 
