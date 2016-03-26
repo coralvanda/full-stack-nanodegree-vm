@@ -6,9 +6,9 @@ from sqlalchemy import create_engine
 Base = declarative_base()
 
 
-puppies_and_adopters = Table('adopted', Base.metadata,
-    Column(puppy_id, Integer, ForeignKey(puppy.id)),
-    Column(adopter_id, Integer, ForeignKey(adopter.id)))
+puppies_and_adopters = Table('adopted_by', Base.metadata,
+    Column('puppy_id', Integer, ForeignKey('puppy.id')),
+    Column('adopter_id', Integer, ForeignKey('adopter.id')))
 
 
 class Shelter(Base):
@@ -20,6 +20,9 @@ class Shelter(Base):
     state = Column(String(20))
     zipCode = Column(String(10))
     website = Column(String)
+    maximum_capacity = Column(Integer)
+    current_occupancy = Column(Integer)
+
     
 class Puppy(Base):
     __tablename__ = 'puppy'
@@ -31,20 +34,25 @@ class Puppy(Base):
     shelter_id = Column(Integer, ForeignKey('shelter.id'))
     shelter = relationship(Shelter)
     weight = Column(Numeric(10))
-    profile = relationship(Puppy_Profile, 
-        uselist = False, back_populates=Puppy)
-    adopter = relationship(Adopter,
-        secondary=puppies_and_adopters, back_populates = Puppy)
+    
+    profile = relationship("Puppy_Profile",
+        uselist = False,
+        back_populates = "puppy")
+
+    adopters = relationship("Adopter",
+        secondary = puppies_and_adopters,
+        back_populates = "puppies")
 
 
 class Puppy_Profile(Base):
     __tablename__ = 'puppy_profile'
-
-    puppy_id = Column(Integer, ForeignKey('puppy.id'))
+    id = Column(Integer, primary_key = True)
     pic_url = Column(String(250))
     description = Column(String(250))
     needs = Column(String(250))
-    puppy = relationship(Puppy, back_populates=Puppy_Profile)
+
+    puppy_id = Column(Integer, ForeignKey('puppy.id'))
+    puppy = relationship("Puppy", back_populates = "profile")
 
 
 class Adopter(Base):
@@ -52,9 +60,10 @@ class Adopter(Base):
 
     id = Column(Integer, primary_key = True)
     name = Column(String(250), nullable = False)
-    puppies = relationship(Puppy, 
-        secondary=puppies_and_adopters, back_populates = Adopter)
-    
+
+    puppies = relationship("Puppy",
+        secondary = puppies_and_adopters,
+        back_populates = "adopters")
 
 
 
