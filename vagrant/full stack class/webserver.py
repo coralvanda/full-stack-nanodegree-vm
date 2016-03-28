@@ -63,7 +63,8 @@ class WebServerHandler(BaseHTTPRequestHandler):
 				restaurants = session.query(Restaurant).all()
 				for restaurant in restaurants:
 					output += "<p>%s</p>" % restaurant.name
-					output += "<form action='http://google.com' style='display:inline;'>"
+					output += "<form action='/restaurant/%s/edit' \
+					style='display:inline;'>" % restaurant.id
 					output += "<input value='Edit' type='submit'></input>"
 					output += "</form>"
 					output += "<form action='http://google.com' style='display:inline;'>"
@@ -91,7 +92,26 @@ class WebServerHandler(BaseHTTPRequestHandler):
 				print output
 				return
 
+			if self.path.endswith("/edit"):
+				self.send_response(200)
+				self.send_header('Content-type', 'text/html')
+				self.end_headers()
 
+				rest_id = self.path[:-5]
+				rest_id = rest_id[rest_id.rfind("/") + 1:]
+
+				rest_to_update = session.query(Restaurant).filter_by(id = rest_id).one()
+
+				output = ''
+				output += "<html><body>"
+				output += "<h1>%s</h1>" % rest_to_update.name
+				output += "<form method='POST' enctype='multipart/form-data' \
+				action='/restaurants/%s/edit'><input name='message' type='text' >\
+				<input type='submit' value='Rename'></form>" % rest_to_update.id
+				output += "</body></html>"
+				self.wfile.write(output)
+				print output
+				return
 
 		except IOError:
 			self.send_error(404, "File Not Found %s" % self.path)
@@ -109,12 +129,32 @@ class WebServerHandler(BaseHTTPRequestHandler):
 				session.add(new_restaurant)
 				session.commit()
 
-			self.send_response(301)
-			self.send_header('Content-type', 'text/html')
-			self.send_header('Location', '/restaurants')
-			self.end_headers()
+				self.send_response(301)
+				self.send_header('Content-type', 'text/html')
+				self.send_header('Location', '/restaurants')
+				self.end_headers()
+				return
 
-			return
+			if self.path.endswith("/edit"):
+				ctype, pdict = cgi.parse_header(self.headers.getheader(
+				'content-type'))
+				if ctype == 'multipart/form-data':
+					fields = cgi.parse_multipart(self.rfile, pdict)
+					messagecontent = fields.get('message')
+
+				rest_id = self.path[:-5]
+				rest_id = rest_id[rest_id.rfind("/") + 1:]
+
+				rest_to_update = session.query(Restaurant).filter_by(id = rest_id).one()
+				rest_to_update.name = messagecontent[0]
+				session.add(rest_to_update)
+				session.commit()
+
+				self.send_response(301)
+				self.send_header('Content-type', 'text/html')
+				self.send_header('Location', '/restaurants')
+				self.end_headers()
+				return
 
 		except:
 			pass
