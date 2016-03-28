@@ -30,7 +30,6 @@ class WebServerHandler(BaseHTTPRequestHandler):
 				value='Submit'></form>"
 				output += "</body></html>"
 				self.wfile.write(output)
-				print output
 				return
 
 			if self.path.endswith("/hola"):
@@ -48,7 +47,6 @@ class WebServerHandler(BaseHTTPRequestHandler):
 				value='Submit'></form>"
 				output += "</body></html>"
 				self.wfile.write(output)
-				print output
 				return
 
 			if self.path.endswith("/restaurants"):
@@ -67,12 +65,12 @@ class WebServerHandler(BaseHTTPRequestHandler):
 					style='display:inline;'>" % restaurant.id
 					output += "<input value='Edit' type='submit'></input>"
 					output += "</form>"
-					output += "<form action='http://google.com' style='display:inline;'>"
+					output += "<form action='/restaurant/%s/delete'" % restaurant.id
+					output += "style='display:inline;'>"
 					output += "<input value='Delete' type='submit'></input>"
 					output += "</form>"
 				output += "</body></html>"
 				self.wfile.write(output)
-				print output
 				return
 
 			if self.path.endswith("/restaurants/new"):
@@ -89,7 +87,6 @@ class WebServerHandler(BaseHTTPRequestHandler):
 				value='Create'></form>"
 				output += "</body></html>"
 				self.wfile.write(output)
-				print output
 				return
 
 			if self.path.endswith("/edit"):
@@ -110,7 +107,25 @@ class WebServerHandler(BaseHTTPRequestHandler):
 					output += "<input type='submit' value='Rename'></form>" 
 					output += "</body></html>"
 					self.wfile.write(output)
-					print output
+					return
+
+			if self.path.endswith("/delete"):
+				rest_id = self.path.split("/")[2]
+				rest_to_delete = session.query(Restaurant).filter_by(id = rest_id).one()
+
+				if rest_to_delete:
+					self.send_response(200)
+					self.send_header('Content-type', 'text/html')
+					self.end_headers()
+
+					output = "<html><body>"
+					output += "<h1>Are you sure you want to \
+					delete %s?</h1>" % rest_to_delete.name
+					output += "<form method='POST' enctype='multipart/form-data'"
+					output += "action='/restaurants/%s/delete'>" % rest_to_delete.id
+					output += "<input type='submit' value='Delete'></form>"
+					output += "</body></html>"
+					self.wfile.write(output)
 					return
 
 		except IOError:
@@ -148,6 +163,20 @@ class WebServerHandler(BaseHTTPRequestHandler):
 				if rest_to_update:
 					rest_to_update.name = messagecontent[0]
 					session.add(rest_to_update)
+					session.commit()
+
+					self.send_response(301)
+					self.send_header('Content-type', 'text/html')
+					self.send_header('Location', '/restaurants')
+					self.end_headers()
+					return
+
+			if self.path.endswith("/delete"):
+				rest_id = self.path.split("/")[2]
+				rest_to_delete = session.query(Restaurant).filter_by(id = rest_id).one()
+
+				if rest_to_delete:
+					session.delete(rest_to_delete)
 					session.commit()
 
 					self.send_response(301)
