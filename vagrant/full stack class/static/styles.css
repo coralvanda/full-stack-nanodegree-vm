@@ -1,0 +1,68 @@
+body {
+	background-image: url("bistro.jpg")
+}
+
+#layout {
+	height:auto;
+	max-width: 620px;
+	margin: auto;
+	border-style: none;
+	overflow: auto;
+}
+
+div {
+	border: 2px solid black;
+}
+
+.listing {
+	margin: auto;
+	background-color: rgb(82,82,82);
+	background-color: rgba(82,82,82,0.7);
+	border-radius: 5px;
+}
+
+hr {
+	border: 1px solid black;
+	margin-top: 1px;
+	margin-bottom: 1px;
+}
+
+.restaurant {
+	border-radius: 20px;
+	float: left;
+	width: 200px;
+	height: 100px;
+	margin: 1px;
+	background-color: rgb(82,82,82);
+	background-color: rgba(82,82,82,0.7);
+}
+
+.menuitem {
+	border-radius: 20px;
+	float: left;
+	width: 200px;
+	min-height: 150px;
+	margin: 1px;
+	background-color: rgb(82,82,82);
+	background-color: rgba(82,82,82,0.7);
+}
+
+h1 {
+	margin: auto;
+	text-align: center;
+}
+
+h3 {
+	margin: 5px;
+}
+
+a {
+	color: black;
+}
+
+.new {
+	margin: auto;
+	vertical-align: middle;
+	text-align: center;
+	font-size: 25px;
+}
