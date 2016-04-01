@@ -16,8 +16,8 @@ div {
 
 .listing {
 	margin: auto;
-	background-color: rgb(82,82,82);
-	background-color: rgba(82,82,82,0.7);
+	background-color: rgb(200,200,200);
+	background-color: rgba(200,200,200,0.7);
 	border-radius: 5px;
 }
 
@@ -33,36 +33,64 @@ hr {
 	width: 200px;
 	height: 100px;
 	margin: 1px;
-	background-color: rgb(82,82,82);
-	background-color: rgba(82,82,82,0.7);
+	background-color: rgb(200,200,200);
+	background-color: rgba(200,200,200,0.7);
 }
 
 .menuitem {
 	border-radius: 20px;
 	float: left;
 	width: 200px;
-	min-height: 150px;
+	height: 150px;
 	margin: 1px;
-	background-color: rgb(82,82,82);
-	background-color: rgba(82,82,82,0.7);
+	overflow: auto;
+	background-color: rgb(200,200,200);
+	background-color: rgba(200,200,200,0.7);
 }
 
 h1 {
 	margin: auto;
 	text-align: center;
+	font-family: 'EB Garamond', serif;
+	font-weight: 400;
 }
 
 h3 {
-	margin: 5px;
+	text-align: center;
 }
 
 a {
 	color: black;
 }
 
+p {
+	margin-top: 1px;
+	margin-bottom: 1px;
+}
+
 .new {
-	margin: auto;
 	vertical-align: middle;
 	text-align: center;
-	font-size: 25px;
+	font-size: 20px;
+}
+
+.name-price {
+	text-align: center;
+	font-size: 15px;
+}
+
+#edit-delete {
+	margin: auto;
+	margin-top: 1px;
+	margin-bottom: 1px;
+	text-align: center;
+}
+
+#description {
+	overflow: auto;
+	margin-top: 1px;
+	margin-bottom: 1px;
+	width: 100%;
+	height: 50%;
+	border: 0px;
 }

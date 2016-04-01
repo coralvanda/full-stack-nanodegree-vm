@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Listed Restaurants</title>
+	<link rel="stylesheet" 
+	href="{{url_for('static', filename='styles.css')}}">
+	<link href='https://fonts.googleapis.com/css?family=EB+Garamond' rel='stylesheet' type='text/css'>
+</head>
+<body>
+	<div id='layout'>
+		<div class = 'listing'>
+			<h1>Select a Restaurant to see its Menu</h1>
+			{% if not restaurants %}
+				<p> No restaurants listed </p>
+			{% endif %}
+			{% with messages = get_flashed_messages() %}
+			{% if messages %}
+				<ul>
+					{% for message in messages %}
+						<li><strong> {{message}} </strong></li>
+					{% endfor %}
+				</ul>
+			{% endif %}
+		{% endwith %}
+		</div>
+		{% for r in restaurants %}
+			<div class = 'restaurant'>
+				<h3><a href = '{{url_for("showMenu", restaurant_id =
+				r.id)}}'>{{r.name}}</a></h3>
+				<p id='edit-delete'>
+				<a href = '{{url_for("editRestaurant", restaurant_id =
+				r.id)}}'>Edit</a>
+				<a href = '{{url_for("deleteRestaurant", restaurant_id =
+				r.id)}}'>Delete</a>
+				</p>
+			</div>
+		{% endfor %}
+		<div class = 'restaurant'>
+			<p  class='new'>
+				<a href = '{{url_for("newRestaurant")}}'>Enter a new restaurant</a>
+			</p>
+		</div>
+	</div>
+</body>
+</html>

@@ -2,35 +2,42 @@
 <html>
 <head>
 	<title>Rename a menu item</title>
+	<link rel="stylesheet" 
+	href="{{url_for('static', filename='styles.css')}}">
+	<link href='https://fonts.googleapis.com/css?family=EB+Garamond' rel='stylesheet' type='text/css'>
 </head>
 <body>
-	<h1>Enter the new name</h1>
-	<form action = '{{url_for("editMenuItem", restaurant_id =
-	restaurant_id, menu_id = item.id)}}' method = 'POST'>
-		<fieldset>
-		<legend>Enter changes</legend>
-		<p>Name:</p>
-		<input type = 'text' size = '30' name = 'name'
-		value = '{{item.name}}' required="required">
-		<p>Description</p>
-		<input type = 'text' size = '30' name = 'desc'
-		value='{{item.description}}' required="required">
-		<p>Price:</p>
-		<input type = 'text' size = '10' name = 'price' 
-		value = '{{item.price}}' required="required">
-		<p>Course:</p>
-		<input type = 'radio' name = 'course' value = 'Appetizer'>Appetizer
-		<br>
-		<input type = 'radio' name = 'course' value = 'Entree'>Entree
-		<br>
-		<input type = 'radio' name = 'course' value = 'Dessert'>Dessert
-		<br>
-		<input type = 'radio' name = 'course' value = 'Drink'>Drink
-		<br>
-		<input type = 'submit' value = 'Confirm'>
-		<a href ='{{url_for("showMenu", restaurant_id = 
-		restaurant_id)}}'>Cancel</a>
-		</fieldset>
-	</form>
+	<div id='layout'>
+		<div class = 'listing'>
+			<h1>{{item.name}}</h1>
+			<form action = '{{url_for("editMenuItem", restaurant_id =
+			restaurant_id, menu_id = item.id)}}' method = 'POST'>
+				<fieldset>
+				<legend>Enter changes</legend>
+				<p>Name:</p>
+				<input type = 'text' size = '30' name = 'name'
+				value = '{{item.name}}' required="required">
+				<p>Description</p>
+				<input type = 'text' size = '30' name = 'desc'
+				value='{{item.description}}' required="required">
+				<p>Price:</p>
+				<input type = 'text' size = '10' name = 'price' 
+				value = '{{item.price}}' required="required">
+				<p>Course:</p>
+				<input type = 'radio' name = 'course' value = 'Appetizer'>Appetizer
+				<br>
+				<input type = 'radio' name = 'course' value = 'Entree'>Entree
+				<br>
+				<input type = 'radio' name = 'course' value = 'Dessert'>Dessert
+				<br>
+				<input type = 'radio' name = 'course' value = 'Drink'>Drink
+				<br>
+				<input type = 'submit' value = 'Confirm'>
+				<a href ='{{url_for("showMenu", restaurant_id = 
+				restaurant_id)}}'>Cancel</a>
+				</fieldset>
+			</form>
+		</div>
+	</div>
 </body>
 </html>
